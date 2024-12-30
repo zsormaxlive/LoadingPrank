@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milano Roleplay</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+            url('backgroundiprp.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .header {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+        }
+
+        .server-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .server-title {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #7fff00, #32cd32);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(127, 255, 0, 0.3);
+        }
+
+        .server-subtitle {
+            color: #eee;
+            font-size: 1rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .bottom-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            z-index: 1;
+        }
+
+        .hosting-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            max-width: 400px;
+        }
+
+        .music-player {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .album-art {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .track-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .track-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .track-artist {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-container {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background: #7fff00;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .loading-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 2;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #7fff00, #32cd32);
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(127, 255, 0, 0.5);
+        }
+
+        .loading-text {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin-left: 10px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <audio id="audioPlayer" autoplay>
+        <source src="iprpmusic.mp3" type="audio/mpeg">
+        Il tuo browser non supporta l'elemento audio.
+    </audio>
+
+    <div class="background"></div>
+
+    <div class="header">
+        <div class="logo-section">
+            <img src="iprplogo.png" alt="Logo" class="logo">
+            <div class="server-info">
+                <div class="server-title">ITALIAN PARADISE</div>
+                <div class="server-subtitle">MODIFICATO DA LORENZO SORMANI</div>
+            </div>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-discord fa-lg"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram fa-lg"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-youtube fa-lg"></i></a>
+            <a href="#" class="social-icon"><i class="fas fa-gamepad fa-lg"></i></a>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="hosting-info">
+            <i class="fas fa-server fa-2x"></i>
+            <div>
+                <h3>Gamehosting.it</h3>
+                <p>Provider Ufficiale di Italian Paradise RP</p>
+            </div>
+        </div>
+
+        <div class="music-player">
+            <img src="iprplogo.png" alt="Album Art" class="album-art">
+            
+            <div class="track-info">
+                <div class="track-title">Italian Paradise - v8.0</div>
+                <div class="track-artist">Lorenzo Sormani</div>
+            </div>
+
+            <div class="player-controls">
+                <button class="control-btn" id="prevBtn"><i class="fas fa-backward"></i></button>
+                <button class="control-btn" id="playBtn"><i class="fas fa-play"></i></button>
+                <button class="control-btn" id="nextBtn"><i class="fas fa-forward"></i></button>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <div class="time-info">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center;">
+                <button class="control-btn" id="volumeBtn"><i class="fas fa-volume-up"></i></button>
+                <input type="range" min="0" max="100" value="100" class="volume-slider" id="volumeSlider">
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-bar">
+        <div class="loading-progress" id="loadingProgress"></div>
+    </div>
+    <div class="loading-text">Caricamento in corso...</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const playBtn = document.getElementById('playBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const progressBar = document.getElementById('progressBar');
+            const volumeBtn = document.getElementById('volumeBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+            const currentTimeSpan = document.getElementById('currentTime');
+            const durationSpan = document.getElementById('duration');
+
+            const playlist = [
+                {
+                    title: "Milano Roleplay - v2.0",
+                    artist: "Lorenzo Sormani",
+                    file: "iprpmusic.mp3",
+                    cover: "iprplogo.png"
+                }
+            ];
+
+            let currentTrack = 0;
+
+            // Avvia automaticamente la riproduzione e aggiorna l'icona play
+            audioPlayer.play()
+                .then(() => {
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                })
+                .catch(error => {
+                    console.error('Errore nell\'autoplay:', error);
+                });
+
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+
+            function loadTrack(trackIndex) {
+                const track = playlist[trackIndex];
+                audioPlayer.src = track.file;
+                document.querySelector('.track-title').textContent = track.title;
+                document.querySelector('.track-artist').textContent = track.artist;
+                document.querySelector('.album-art').src = track.cover;
+                
+                // Reset progress
+                progressBar.style.width = '0%';
+                currentTimeSpan.textContent = '0:00';
+                
+                // Preload audio
+                audioPlayer.load();
+            }
+
+            // Controlli di base
+            playBtn.addEventListener('click', () => {
+                if (audioPlayer.paused) {
+                    audioPlayer.play()
+                        .then(() => {
+                            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                        })
+                        .catch(error => {
+                            console.error('Errore nella riproduzione:', error);
+                        });
+                } else {
+                    audioPlayer.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            });
+
+            // Aggiornamento progress bar
+            audioPlayer.addEventListener('timeupdate', () => {
+                if (audioPlayer.duration) {
+                    const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    currentTimeSpan.textContent = formatTime(audioPlayer.currentTime);
+                }
+            });
+
+            // Metadata loaded
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                durationSpan.textContent = formatTime(audioPlayer.duration);
+            });
+
+            // Click sulla progress bar
+            document.querySelector('.progress-bar').addEventListener('click', (e) => {
+                const progressBar = e.currentTarget;
+                const clickPosition = e.offsetX;
+                const totalWidth = progressBar.offsetWidth;
+                const percentage = (clickPosition / totalWidth);
+                audioPlayer.currentTime = percentage * audioPlayer.duration;
+            });
+
+            // Controllo volume
+            volumeSlider.addEventListener('input', (e) => {
+                const volume = e.target.value / 100;
+                audioPlayer.volume = volume;
+                updateVolumeIcon(volume);
+            });
+
+            function updateVolumeIcon(volume) {
+                if (volume === 0) {
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                } else if (volume < 0.5) {
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+                } else {
+                    volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+            }
+
+            volumeBtn.addEventListener('click', () => {
+                if (audioPlayer.volume > 0) {
+                    audioPlayer.volume = 0;
+                    volumeSlider.value = 0;
+                } else {
+                    audioPlayer.volume = 1;
+                    volumeSlider.value = 100;
+                }
+                updateVolumeIcon(audioPlayer.volume);
+            });
+
+            // Controlli traccia precedente/successiva
+            prevBtn.addEventListener('click', () => {
+                currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+                loadTrack(currentTrack);
+                audioPlayer.play()
+                    .then(() => {
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    })
+                    .catch(error => {
+                        console.error('Errore nella riproduzione:', error);
+                    });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                currentTrack = (currentTrack + 1) % playlist.length;
+                loadTrack(currentTrack);
+                audioPlayer.play()
+                    .then(() => {
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    })
+                    .catch(error => {
+                        console.error('Errore nella riproduzione:', error);
+                    });
+            });
+
+            // Autoplay alla fine della traccia
+            audioPlayer.addEventListener('ended', () => {
+                currentTrack = (currentTrack + 1) % playlist.length;
+                loadTrack(currentTrack);
+                audioPlayer.play()
+                    .then(() => {
+                        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    })
+                    .catch(error => {
+                        console.error('Errore nella riproduzione:', error);
+                    });
+            });
+
+            // Simulazione del caricamento
+            let progress = 0;
+            const loadingBar = document.getElementById('loadingProgress');
+            
+            function updateProgress() {
+                if (progress < 100) {
+                    progress += Math.random() * 2;
+                    progress = Math.min(progress, 100);
+                    loadingBar.style.width = progress + '%';
+                    setTimeout(updateProgress, 100);
+                }
+            }
+
+            // Inizializzazione
+            loadTrack(currentTrack);
+            updateProgress();
+
+            // Gestione errori audio
+            audioPlayer.addEventListener('error', (e) => {
+                console.error('Errore durante il caricamento dell\'audio:', e);
+                alert('Si è verificato un errore durante il caricamento dell\'audio. Controlla che il file sia presente e nel formato corretto.');
+            });
+        });
+    </script>
+</body>
+</html>
